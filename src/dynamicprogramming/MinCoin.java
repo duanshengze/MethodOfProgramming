@@ -5,69 +5,41 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * 最少钱币数
+ * 题目：最少钱币数
  * 如果我们有面值为1，3，5元的硬币若干，如何用最少的硬币凑够11元？
+ * 分析
+ * http://www.wisim.me/algorithm/2015/05/13/DP_MinCoins.html
+ * 
  */
 public class MinCoin {
-//	public static void minCoin(int[]coin,int typeSize,int value){
-//		int[]coinUsed=new int[value+1];
-//		int[] coinTrack =new int[value+1];
-//		coinUsed[0]=0;
-//		coinTrack[0]=0;
-//		
-//		for(int i=0;i<value;i++){
-//			int mincoin=i;
-//			int lastin=0;
-//			for(int j=0;j<typeSize;j++){
-//				if(coin[j]<=i){
-//					
-//					if(coinUsed[i-coin[j]]+1<mincoin){
-//						mincoin=coinUsed[i-coin[j]]+1;
-//						lastin=coin[j];
-//					}
-//				}
-//				
-//				
-//			}
-//			coinUsed[i]=mincoin;
-//			coinTrack[i]=lastin;
-//			
-//		}
-//		while(value>0){
-//			System.out.println(coinTrack[value]);
-//			value-=coinTrack[value];
-//		}
-//		
-//	}
-//	public static void main(String[] args) {
-//		minCoin(new int[]{1,2,5,21,25}, 5, 63);
-//	}
+
 	public static void main(String[] args) {
-        int[] a = new int[]{1,3,5};
-        minCoins(a,11);
+        int[] a = new int[]{1,2,5,21,25};
+        minCoins(a,63);
     }
+	
+	private static int min(int a,int b) {
+		return a>b?b:a;
 
-    public static void minCoins(int[] a,int x) {
-
-        int[] MIN = new int[x+1];
-
-        MIN[0] = 0;
-
-        for (int i = 0 ; i < MIN.length; i++) {
-            //每次循环首先都要将MIN[i]设值i，也就置为最大值。
-            MIN[i] = i;
-            for (int j = 0;j<a.length;j++) {
-                //接着要判断这次要凑的硬币是否大于最基本的三枚硬币的面值{1,3,5}，并且去除某个面值之后的硬币个数加1的总个数要小于刚刚设置的最大值
-                if (i>=a[j] && (MIN[i-a[j]]+1)<MIN[i]) {
-                    //要保存此次得到的最小值
-                    MIN[i] = MIN[i-a[j]]+1;
-                    System.out.println("Temp --> MIN["+i+"] = "+MIN[i]);
-                }
-
-            }
-
-           System.out.println("MIN["+i+"] = "+MIN[i]);
-        }
+	}
+    public static void minCoins(int[] a,int value) {
+    	//包括 minCoin[0]=0;所以数组的长度为value+1;
+    	int[]minCoins=new int[value+1];
+    	for(int i=0;i<minCoins.length;i++){
+    		//先默认最小数量为 钱数本身即minCoins[i]=i;
+    		minCoins[i]=i;
+    		for(int j=0;j<a.length;j++){
+    			int temp=0;
+    			if(i>a[j]){
+    				temp=minCoins[i-a[j]]+1;
+    				minCoins[i]=min(temp,minCoins[i]);
+    				System.out.println("遇到钱币"+a[j]+"时，"+"minCoins["+i+"]="+minCoins[i]);
+    			}
+    			
+    		}
+    		System.out.println("最终"+"minCoins["+i+"]="+minCoins[i]);
+    	}
+    	
     }
 	
 }
